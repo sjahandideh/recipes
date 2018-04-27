@@ -3,7 +3,6 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -31,13 +30,6 @@ module.exports = {
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
-  },
-  resolve: {
-    extensions: ['.js', '.vue', '.json'],
-    alias: {
-      'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src'),
-    }
   },
   module: {
     rules: [
@@ -75,40 +67,18 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
-      },
-      // this handles .less translation
-      {
-        use: ExtractTextPlugin.extract({
-          use: ['css-loader', 'less-loader']
-        }),
-        test: /\.less$/
-      },
-      // this rule handles images
-      {
-        test: /\.jpe?g$|\.gif$|\.ico$|\.png$|\.svg$/,
-        use: 'file-loader?name=[name].[ext]?[hash]'
-      },
-      // the following 3 rules handle font extraction
-      {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/font-woff'
-      },
-      {
-        test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader'
-      },
-      {
-        test: /\.otf(\?.*)?$/,
-        use: 'file-loader?name=/fonts/[name].  [ext]&mimetype=application/font-otf'
       }
     ]
   },
-  plugins: [
-     // this handles the bundled .css output file
-     new ExtractTextPlugin({
-       filename: '[name].[contenthash].css',
-     })
-  ],
+  resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js',
+      '@': resolve('src'),
+      '../../theme.config': resolve('semantic-theme/theme.config'),
+      'semantic-ui-less': resolve('node_modules/semantic-ui-less/semantic.less')
+    }
+  },
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue
     // source contains it (although only uses it if it's native).
