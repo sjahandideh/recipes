@@ -20,3 +20,11 @@ cp node_modules/semantic-ui-less/theme.config.example semanthic-theme/theme.conf
 cp -rf node_modules/semantic-ui-less/_site/** semanthic-theme/site
 ```
 src: https://medium.com/webmonkeys/webpack-2-semantic-ui-theming-a216ddf60daf
+
+## Set up Vuex
+
+```
+npm install --save vuex
+
+```
+src: https://vuex.vuejs.org/en/installation.html
