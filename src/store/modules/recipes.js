@@ -69,18 +69,30 @@ const state = {
     { id: 11, title: 'chickpeas' },
     { id: 12, title: 'sunflower seeds' }
   ],
-  recipes: [
-    chorizo, chorizo, chorizo, chorizo, chorizo
-  ]
+  recipes: []
 }
 
 export const getters = {
   getRecipes: state => state.recipes
 }
 
-export const actions = {}
+export const actions = {
+  saveRecipe (context, recipe) {
+    context.commit('saveRecipe', recipe)
+    sessionStorage.setItem('recipes', JSON.stringify(context.state.recipes))
+  },
+  syncRecipes (context) {
+    context.recipes = JSON.parse(sessionStorage.getItem('recipes'))
+  }
+}
 
-export const mutations = {}
+export const mutations = {
+  saveRecipe (state, recipe) {
+    let recipes = state.recipes
+    recipes.push(recipe)
+    state.recipes = recipes
+  }
+}
 
 export default {
   state,
