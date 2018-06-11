@@ -12,16 +12,45 @@ describe('recipes stores', () => {
     expect(getRecipes(state)).toEqual(state.recipes)
   })
 
-  it('save a new recipe', () => {
-    const state = {
-      recipes: []
-    }
+  describe('save a new recipe', () => {
+    it('save recipe to an empty list and assign id 1', () => {
+      const state = {
+        meta: {
+          recipes: {
+            lastIndex: 0
+          }
+        },
+        recipes: []
+      }
 
-    let recipe = { title: 'my new Recipe' }
+      let recipe = { title: 'my new Recipe' }
 
-    saveRecipe(state, recipe)
+      saveRecipe(state, recipe)
 
-    expect(state.recipes.length).toEqual(1)
-    expect(state.recipes[0].title).toEqual(recipe.title)
+      expect(state.recipes.length).toEqual(1)
+      expect(state.recipes[0].title).toEqual(recipe.title)
+      expect(state.recipes[0].id).toEqual(1)
+      expect(state.meta.recipes.lastIndex).toEqual(1)
+    })
+
+    it('save recipe to a non-empty list and assign id properly', () => {
+      const state = {
+        meta: {
+          recipes: {
+            lastIndex: 2
+          }
+        },
+        recipes: [{ id: 2, title: 'old recipe' }]
+      }
+
+      let recipe = { title: 'my new Recipe' }
+
+      saveRecipe(state, recipe)
+
+      expect(state.recipes.length).toEqual(2)
+      expect(state.recipes[1].title).toEqual(recipe.title)
+      expect(state.recipes[1].id).toEqual(3)
+      expect(state.meta.recipes.lastIndex).toEqual(3)
+    })
   })
 })

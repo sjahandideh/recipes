@@ -54,15 +54,13 @@
         </div>
         -->
 
-        <button @click.prevent='saveRecipe(recipe)' class='ui button'>Submit</button>
+        <button @click.prevent='handleSubmitRecipe' class='ui button'>Continue</button>
       </form>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-
 export default {
   name: 'RecipeNew',
   data () {
@@ -76,9 +74,17 @@ export default {
       }
     }
   },
-  methods: mapActions([
-    'saveRecipe'
-  ])
+  methods: {
+    handleSubmitRecipe: function (e) {
+      this.$store.dispatch('saveAndReturnRecipe', this.recipe)
+        .then((recipe) => {
+          this.$router.push({
+            name: 'IngredientList',
+            params: { recipeId: recipe.id }
+          })
+        })
+    }
+  }
 }
 </script>
 
