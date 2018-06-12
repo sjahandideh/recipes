@@ -35,12 +35,12 @@ export const getters = {
 
 export const actions = {
   saveRecipe (context, recipe) {
-    context.commit('saveRecipe', recipe)
+    context.commit('createRecipe', recipe)
     sessionStorage.setItem('recipes', JSON.stringify(context.state.recipes))
   },
   saveAndReturnRecipe (context, recipe) {
     return new Promise((resolve, reject) => {
-      context.dispatch('saveRecipe', recipe)
+      context.dispatch('createRecipe', recipe)
       resolve(recipe)
     })
   },
@@ -50,7 +50,7 @@ export const actions = {
 }
 
 export const mutations = {
-  saveRecipe (state, recipe) {
+  createRecipe (state, recipe) {
     let meta = state.meta
     let recipes = state.recipes
 
@@ -60,7 +60,23 @@ export const mutations = {
 
     state.recipes = recipes
     state.meta = meta
+  },
+  addIngredient (state, recipeId, ingredient) {
+    let recipe = _findItem(state.recipes, recipeId)
+    if (!recipe.ingredients) {
+      recipe.ingredients = []
+    }
+    recipe.ingredients.push(ingredient)
   }
+}
+
+// PRIVATE
+function _findItem (list, id) {
+  let items = list.filter(listItem => listItem.id === id)
+  if (items.length === 0) {
+    throw Error('ITEM WITH ID ', id, ' NOT FOUND')
+  }
+  return items[0]
 }
 
 export default {
