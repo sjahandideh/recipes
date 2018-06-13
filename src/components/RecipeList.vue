@@ -20,6 +20,7 @@
 <script>
 import RecipeListItem from './RecipeListItem.vue'
 import { mapGetters } from 'vuex'
+import { listRecipes } from '../gqlSchema'
 
 export default {
   name: 'RecipeList',
@@ -28,6 +29,15 @@ export default {
   }),
   components: {
     RecipeListItem
+  },
+  mounted () {
+    this.$apollo.query({
+      query: listRecipes
+    })
+    .then(data => this.$store.commit(
+      'fetchRecipes',
+      data.data.listRecipes.items)
+    ).catch(error => console.error("Error!!!: ", error))
   }
 }
 </script>

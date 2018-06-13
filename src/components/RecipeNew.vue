@@ -61,6 +61,8 @@
 </template>
 
 <script>
+import { CreateRecipe } from '../gqlSchema'
+
 export default {
   name: 'RecipeNew',
   data () {
@@ -78,10 +80,22 @@ export default {
     handleSubmitRecipe: function (e) {
       this.$store.dispatch('saveAndReturnRecipe', this.recipe)
         .then((recipe) => {
-          this.$router.push({
-            name: 'IngredientList',
-            params: { recipeId: recipe.id }
+          let minimalRecipe = {
+            id: recipe.id,
+            title: recipe.title,
+            method: recipe.method
+          }
+          this.$apollo.mutate({
+            mutation: CreateRecipe,
+            variables: minimalRecipe
           })
+          .then(data => console.log('............ Success: ', data))
+          .catch(error => console.error("............error!!!: ", error))
+
+          //this.$router.push({
+          //  name: 'IngredientList',
+          //  params: { recipeId: recipe.id }
+          //})
         })
     }
   }

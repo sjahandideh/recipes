@@ -36,16 +36,12 @@ export const getters = {
 export const actions = {
   saveRecipe (context, recipe) {
     context.commit('createRecipe', recipe)
-    sessionStorage.setItem('recipes', JSON.stringify(context.state.recipes))
   },
   saveAndReturnRecipe (context, recipe) {
     return new Promise((resolve, reject) => {
-      context.dispatch('createRecipe', recipe)
+      context.commit('createRecipe', recipe)
       resolve(recipe)
     })
-  },
-  syncRecipes (context) {
-    context.recipes = JSON.parse(sessionStorage.getItem('recipes'))
   }
 }
 
@@ -67,6 +63,13 @@ export const mutations = {
       recipe.ingredients = []
     }
     recipe.ingredients.push(ingredient)
+  },
+  fetchRecipes (state, recipes) {
+    let polished = recipes.map(r =>
+      ({ id: Number(r.id), title: r.title, method: r.method })
+    )
+    state.recipes = polished
+    state.meta.recipes.lastIndex = polished.length
   }
 }
 

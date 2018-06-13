@@ -6,6 +6,33 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+import AWSAppSyncClient from 'aws-appsync'
+import VueApollo from 'vue-apollo'
+import AppSyncConfig from '../config/aws-exports'
+
+const config = {
+  url: AppSyncConfig.graphqlEndpoint,
+  region: AppSyncConfig.region,
+  auth: {
+    type: AppSyncConfig.authenticationType,
+    apiKey: AppSyncConfig.apiKey,
+  }
+}
+const options = {
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'cache-and-network',
+    }
+  }
+}
+
+const client = new AWSAppSyncClient(config, options)
+
+const appsyncProvider = new VueApollo({
+  defaultClient: client
+})
+
+Vue.use(VueApollo)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
@@ -14,5 +41,6 @@ new Vue({
   store,
   router,
   components: { App },
+  provide: appsyncProvider.provide(),
   template: '<App/>'
 })

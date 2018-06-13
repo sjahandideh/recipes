@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="image">
-      <img :src='require(`@/assets/${recipe.image}`)'>
+      <img :src='require(`@/assets/${recipe.title}.jpg`)'>
     </div>
     <div class="content">
       <div class="header">{{ recipe.title }}</div>
@@ -23,7 +23,9 @@ export default {
   },
   methods: {
     displayTags: (tags) => {
-      return tags.toString()
+      if (!!tags) {
+        tags.toString()
+      }
     }
   }
 }
